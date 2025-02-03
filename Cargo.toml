@@ -26,7 +26,18 @@ flate2 = "1.0.35"
 indexmap = { version = "2.7.1", features = ["serde"] }
 indicatif = "0.17.11"
 regex = "1.11.1"
-reqwest = "0.12.12"
+reqwest = { version = "0.12.12", default-features = false, features = [
+    "gzip",
+    "brotli",
+    "zstd",
+    "deflate",
+    "json",
+    "http2",
+    "charset",
+    "rustls-tls-manual-roots-no-provider",
+] }
+rustls = { version = "0.23.22", features = ["brotli", "zlib"] }
+rustls-platform-verifier = "0.5.0"
 serde = { version = "1.0.217", features = ["derive"] }
 sha2 = "0.10.8"
 tar = "0.4.43"

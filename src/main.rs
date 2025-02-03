@@ -2,6 +2,7 @@ use std::{
     fs::{self, File},
     io::{Read, Write},
     path::Path,
+    sync::Arc,
 };
 
 use anyhow::{bail, Result};
@@ -10,6 +11,8 @@ use camino::Utf8Path;
 use flate2::read::GzDecoder;
 use indicatif::ProgressBar;
 use reqwest::Client;
+use rustls::crypto::aws_lc_rs;
+use rustls_platform_verifier::BuilderVerifierExt;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256 as Sha256Hasher};
 use tar::Archive;
@@ -56,7 +59,14 @@ async fn main() -> Result<()> {
 
     fs::create_dir_all("sources/tar")?;
 
-    let client = Client::new();
+    let client = Client::builder()
+        .use_preconfigured_tls(
+            rustls::ClientConfig::builder_with_provider(Arc::new(aws_lc_rs::default_provider()))
+                .with_safe_default_protocol_versions()?
+                .with_platform_verifier()
+                .with_no_client_auth(),
+        )
+        .build()?;
 
     for source in &config.sources {
         download_source(&client, source).await?;
