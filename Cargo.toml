@@ -2,6 +2,13 @@
 name = "sugo"
 version = "0.1.0"
 edition = "2021"
+license = "Apache-2.0"
+authors = ["Federico Maria Morrone <contact@morrone.dev>"]
+description = "Simple source manager"
+readme = "README.md"
+documentation = "https://docs.rs/sugo"
+repository = "https://github.com/morr0ne/sugo"
+include = ["src/**/*.rs", "README.md", "LICENSE"]
 
 [profile.release]
 lto = true
